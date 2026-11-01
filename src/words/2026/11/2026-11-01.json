@@ -1,0 +1,26 @@
+[
+  {
+    "dutch": "de kip",
+    "chinese": "母鸡",
+    "exampleDutch": "Mien de kip rent naar Toon de haan.",
+    "exampleChinese": "母鸡 Mien 跑向公鸡 Toon。"
+  },
+  {
+    "dutch": "de haan",
+    "chinese": "公鸡",
+    "exampleDutch": "Mien de kip rent naar Toon de haan.",
+    "exampleChinese": "母鸡 Mien 跑向公鸡 Toon。"
+  },
+  {
+    "dutch": "rent",
+    "chinese": "跑(rennen 的第三人称单数)",
+    "exampleDutch": "Mien de kip rent naar Toon de haan.",
+    "exampleChinese": "母鸡 Mien 跑向公鸡 Toon。"
+  },
+  {
+    "dutch": "tik",
+    "chinese": "轻拍、轻敲(tikken 的第一人称单数)",
+    "exampleDutch": "Ik tik je, Toon.",
+    "exampleChinese": "我拍拍你,Toon。"
+  }
+]

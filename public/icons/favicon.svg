@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#6f9468"/>
+  <g transform="translate(256 262)">
+    <rect x="-150" y="-118" width="236" height="280" rx="34" fill="#c8d9c4" transform="rotate(-9)"/>
+    <rect x="-112" y="-140" width="236" height="280" rx="34" fill="#faf7f2"/>
+    <text x="6" y="58" text-anchor="middle" font-family="-apple-system, 'SF Pro Rounded', 'Helvetica Neue', Arial, sans-serif" font-size="190" font-weight="800" fill="#46613f">W</text>
+  </g>
+</svg>

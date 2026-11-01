@@ -1,0 +1,183 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ChevronLeft, ChevronRight, Layers, Shuffle } from 'lucide-react'
+import { useAllVocabulary, useWordsForDate } from '@/hooks/useVocabulary'
+import { useSelectedDate } from '@/hooks/useSelectedDate'
+import { seededShuffle } from '@/lib/shuffle'
+import { formatShortDate } from '@/lib/dates'
+import { DateNavigator } from '@/components/DateNavigator'
+import { VocabularyCard } from '@/components/VocabularyCard'
+import { Button } from '@/components/ui/Button'
+import { cn } from '@/lib/cn'
+
+type Scope = 'all' | 'day'
+
+export function ReviewPage() {
+  const [scope, setScope] = useState<Scope>('all')
+  const [date, setDate] = useSelectedDate()
+  const [shuffleSeed, setShuffleSeed] = useState<number | null>(null)
+  const [index, setIndex] = useState(0)
+
+  const all = useAllVocabulary()
+  const day = useWordsForDate(date)
+  const source = scope === 'all' ? all : day
+
+  const deck = useMemo(() => {
+    if (!source) return undefined
+    return shuffleSeed === null ? source : seededShuffle(source, shuffleSeed)
+  }, [source, shuffleSeed])
+
+  const total = deck?.length ?? 0
+  const current = Math.min(index, Math.max(total - 1, 0))
+  const item = deck?.[current]
+
+  const go = (delta: number) => setIndex((i) => Math.min(Math.max(Math.min(i, total - 1) + delta, 0), Math.max(total - 1, 0)))
+  const goRef = useRef(go)
+  useEffect(() => {
+    goRef.current = go
+  })
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLElement && e.target.closest('input, textarea, [role="dialog"]')) return
+      if (e.key === 'ArrowRight') goRef.current(1)
+      if (e.key === 'ArrowLeft') goRef.current(-1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+
+  const changeScope = (next: Scope) => {
+    setScope(next)
+    setIndex(0)
+  }
+
+  return (
+    <>
+      <div className="flex flex-wrap items-center gap-3">
+        <div role="radiogroup" aria-label="Words to review" className="flex rounded-xl bg-sage-100 p-1">
+          {(
+            [
+              ['all', 'All words'],
+              ['day', 'One day'],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={scope === value}
+              onClick={() => changeScope(value)}
+              className={cn(
+                'h-9 rounded-lg px-4 text-sm font-medium transition-colors',
+                scope === value ? 'bg-paper text-ink shadow-sm' : 'text-sage-700',
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <Button
+          variant={shuffleSeed === null ? 'secondary' : 'primary'}
+          aria-pressed={shuffleSeed !== null}
+          onClick={() => {
+            setShuffleSeed(Date.now())
+            setIndex(0)
+          }}
+          className="ml-auto h-11"
+        >
+          <Shuffle className="h-4 w-4" aria-hidden />
+          {shuffleSeed === null ? 'Shuffle' : 'Reshuffle'}
+        </Button>
+        {shuffleSeed !== null && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setShuffleSeed(null)
+              setIndex(0)
+            }}
+          >
+            In order
+          </Button>
+        )}
+      </div>
+
+      {scope === 'day' && (
+        <div className="mt-4">
+          <DateNavigator
+            date={date}
+            onChange={(d) => {
+              setDate(d)
+              setIndex(0)
+            }}
+          />
+        </div>
+      )}
+
+      <section aria-label="Review card" className="mt-6">
+        {deck && total === 0 && (
+          <div className="flex flex-col items-center rounded-3xl border-2 border-dashed border-line px-6 py-14 text-center">
+            <div className="mb-3 grid h-12 w-12 place-items-center rounded-full bg-sage-100 text-sage-600">
+              <Layers className="h-6 w-6" aria-hidden />
+            </div>
+            <p className="font-semibold">Nothing to review yet</p>
+            <p className="mt-1 max-w-xs text-sm text-muted">
+              {scope === 'all' ? 'Add some words first, then come back here.' : 'There are no words saved for this day.'}
+            </p>
+          </div>
+        )}
+
+        {item && (
+          <>
+            <div className="mb-3 flex items-center justify-between px-1 text-sm text-muted">
+              <span data-testid="review-progress">
+                {current + 1} / {total}
+              </span>
+              <span>{formatShortDate(item.date)}</span>
+            </div>
+            <div className="mb-4 h-1 overflow-hidden rounded-full bg-sage-100" aria-hidden>
+              <div
+                className="h-full rounded-full bg-sage-400 transition-[width] duration-300"
+                style={{ width: `${((current + 1) / total) * 100}%` }}
+              />
+            </div>
+
+            <div
+              onTouchStart={(e) => {
+                const t = e.touches[0]
+                touchStart.current = { x: t.clientX, y: t.clientY }
+              }}
+              onTouchEnd={(e) => {
+                const start = touchStart.current
+                touchStart.current = null
+                if (!start) return
+                const t = e.changedTouches[0]
+                const dx = t.clientX - start.x
+                const dy = t.clientY - start.y
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1)
+              }}
+            >
+              {/* key resets the flip state when moving to another card */}
+              <VocabularyCard key={item.id} item={item} size="large" />
+            </div>
+
+            <p className="mt-3 text-center text-xs text-muted">Tap the card to flip · swipe or use the buttons to move</p>
+
+            <div className="mt-5 flex gap-3">
+              <Button variant="secondary" size="lg" className="flex-1" onClick={() => go(-1)} disabled={current === 0}>
+                <ChevronLeft className="h-5 w-5" aria-hidden />
+                Previous
+              </Button>
+              <Button size="lg" className="flex-1" onClick={() => go(1)} disabled={current >= total - 1}>
+                Next
+                <ChevronRight className="h-5 w-5" aria-hidden />
+              </Button>
+            </div>
+          </>
+        )}
+      </section>
+    </>
+  )
+}

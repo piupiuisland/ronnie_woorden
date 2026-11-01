@@ -1,0 +1,134 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-cream: #faf7f2;
+  --color-paper: #fffdf9;
+  --color-ink: #2f3a33;
+  --color-muted: #75807a;
+  --color-line: #ebe5da;
+  --color-sage-50: #f2f6f1;
+  --color-sage-100: #e3ece1;
+  --color-sage-200: #c8d9c4;
+  --color-sage-300: #a7c2a1;
+  --color-sage-400: #8aab83;
+  --color-sage-500: #6f9468;
+  --color-sage-600: #587a52;
+  --color-sage-700: #46613f;
+  --color-sage-800: #374d32;
+  --color-danger: #b4483c;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-display: ui-rounded, 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(47 58 51 / 0.05), 0 6px 20px -8px rgb(47 58 51 / 0.14);
+}
+
+:root {
+  color-scheme: light;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overscroll-behavior-y: none;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+/* iOS zooms into inputs with font-size < 16px — keep inputs at 16px. */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+/* ---- Flip card ---- */
+.flip-scene {
+  perspective: 1200px;
+}
+
+.flip-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 300ms cubic-bezier(0.4, 0.1, 0.2, 1);
+}
+
+.flip-inner[data-flipped='true'] {
+  transform: rotateY(180deg);
+}
+
+/* Both faces share one grid cell, so the card is as tall as its tallest face. */
+.flip-face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Safari only honours backface-visibility on elements with their own 3D transform. */
+  transform: rotateY(0deg);
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/*
+ * Don't rely on backface-visibility alone (WebKit sometimes ignores it): hide the
+ * face that points away, switching at the midpoint of the flip when the card is edge-on.
+ */
+.flip-face {
+  transition: visibility 0s linear 150ms;
+}
+
+.flip-inner[data-flipped='false'] .flip-back,
+.flip-inner[data-flipped='true'] .flip-front {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner,
+  .flip-face {
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 220ms ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 180ms ease-out both;
+}
