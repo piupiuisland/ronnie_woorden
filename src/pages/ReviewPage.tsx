@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, Layers, Shuffle } from 'lucide-react'
 import { useAllVocabulary, useWordsForDate } from '@/hooks/useVocabulary'
+import { useSwipe } from '@/hooks/useSwipe'
 import { useSelectedDate } from '@/hooks/useSelectedDate'
 import { seededShuffle } from '@/lib/shuffle'
 import { formatShortDate } from '@/lib/dates'
@@ -46,7 +47,7 @@ export function ReviewPage() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const swipe = useSwipe(go)
 
   const changeScope = (next: Scope) => {
     setScope(next)
@@ -144,21 +145,7 @@ export function ReviewPage() {
               />
             </div>
 
-            <div
-              onTouchStart={(e) => {
-                const t = e.touches[0]
-                touchStart.current = { x: t.clientX, y: t.clientY }
-              }}
-              onTouchEnd={(e) => {
-                const start = touchStart.current
-                touchStart.current = null
-                if (!start) return
-                const t = e.changedTouches[0]
-                const dx = t.clientX - start.x
-                const dy = t.clientY - start.y
-                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1)
-              }}
-            >
+            <div {...swipe}>
               {/* key resets the flip state when moving to another card */}
               <VocabularyCard key={item.id} item={item} size="large" />
             </div>

@@ -93,4 +93,32 @@ describe('HomePage', () => {
     await user.click(within(calendar).getByRole('button', { name: 'Friday, 16 January 2026' }))
     expect(screen.getByTestId('selected-date')).toHaveTextContent('Friday, 16 January 2026')
   })
+
+  it('opens a word full screen, flips it, moves between words and closes', async () => {
+    const user = userEvent.setup()
+    const base = { chinese: '词', exampleChinese: '', updatedAt: '2026-10-30T10:00:00.000Z' }
+    await db.vocabulary.bulkAdd([
+      { ...base, id: 'a', date: '2026-10-30', dutch: 'de kip', exampleDutch: 'De kip rent.', createdAt: '2026-10-30T10:00:00.000Z' },
+      { ...base, id: 'b', date: '2026-10-30', dutch: 'de haan', exampleDutch: 'De haan kraait.', createdAt: '2026-10-30T10:00:01.000Z' },
+    ])
+    renderApp('/?date=2026-10-30')
+
+    await user.click(await screen.findByRole('button', { name: /de haan.*open full screen/i }))
+    const viewer = screen.getByRole('dialog', { name: 'de haan' })
+    expect(within(viewer).getByTestId('viewer-progress')).toHaveTextContent('2 / 2')
+
+    const card = within(viewer).getByTestId('vocabulary-card')
+    await user.click(card)
+    expect(card).toHaveAttribute('data-flipped', 'true')
+
+    await user.click(within(viewer).getByRole('button', { name: 'Previous word' }))
+    expect(screen.getByRole('dialog', { name: 'de kip' })).toBeInTheDocument()
+    expect(within(screen.getByRole('dialog')).getByTestId('vocabulary-card')).toHaveAttribute('data-flipped', 'false')
+
+    await user.keyboard('{ArrowRight}')
+    expect(screen.getByRole('dialog', { name: 'de haan' })).toBeInTheDocument()
+
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
 })

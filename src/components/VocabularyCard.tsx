@@ -1,5 +1,5 @@
 import { useState, type KeyboardEvent } from 'react'
-import { Pencil, RotateCw, Trash2 } from 'lucide-react'
+import { Maximize2, Pencil, RotateCw, Trash2 } from 'lucide-react'
 import type { Vocabulary } from '@/types/vocabulary'
 import { cn } from '@/lib/cn'
 
@@ -7,17 +7,43 @@ interface VocabularyCardProps {
   item: Vocabulary
   onEdit?: (item: Vocabulary) => void
   onDelete?: (item: Vocabulary) => void
-  /** "large" is used in review mode. */
-  size?: 'default' | 'large'
+  /** When set, tapping opens the card (full screen) instead of flipping it. */
+  onOpen?: (item: Vocabulary) => void
+  /** "large" is used in review mode, "full" in the full-screen viewer. */
+  size?: 'default' | 'large' | 'full'
+}
+
+const sizes = {
+  default: {
+    face: 'min-h-40 py-8',
+    word: 'text-[28px] leading-tight',
+    translation: 'mt-2 text-[17px]',
+    example: 'text-lg',
+    exampleTranslation: 'mt-3 text-[15px]',
+  },
+  large: {
+    face: 'min-h-72 py-12 sm:min-h-80',
+    word: 'text-4xl sm:text-5xl',
+    translation: 'mt-2 text-xl',
+    example: 'text-2xl sm:text-3xl',
+    exampleTranslation: 'mt-3 text-lg',
+  },
+  full: {
+    face: 'min-h-[min(60dvh,36rem)] py-14 px-8',
+    word: 'text-5xl leading-tight sm:text-7xl',
+    translation: 'mt-4 text-2xl sm:text-3xl',
+    example: 'text-3xl leading-snug sm:text-5xl',
+    exampleTranslation: 'mt-5 text-xl sm:text-2xl',
+  },
 }
 
 const faceBase =
   'flip-face flex flex-col justify-center rounded-3xl border border-line bg-paper shadow-card px-6 text-center'
 
-export function VocabularyCard({ item, onEdit, onDelete, size = 'default' }: VocabularyCardProps) {
+export function VocabularyCard({ item, onEdit, onDelete, onOpen, size = 'default' }: VocabularyCardProps) {
   const [flipped, setFlipped] = useState(false)
-  const large = size === 'large'
-  const toggle = () => setFlipped((f) => !f)
+  const s = sizes[size]
+  const toggle = () => (onOpen ? onOpen(item) : setFlipped((f) => !f))
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) return
@@ -33,8 +59,14 @@ export function VocabularyCard({ item, onEdit, onDelete, size = 'default' }: Voc
         <div
           role="button"
           tabIndex={0}
-          aria-pressed={flipped}
-          aria-label={flipped ? `${item.dutch}: example sentence. Activate to show the word.` : undefined}
+          aria-pressed={onOpen ? undefined : flipped}
+          aria-label={
+            onOpen
+              ? `${item.dutch}, ${item.chinese}. Open full screen`
+              : flipped
+                ? `${item.dutch}: example sentence. Activate to show the word.`
+                : undefined
+          }
           onClick={toggle}
           onKeyDown={onKeyDown}
           data-flipped={flipped}
@@ -45,39 +77,32 @@ export function VocabularyCard({ item, onEdit, onDelete, size = 'default' }: Voc
           )}
         >
           <div
-            className={cn(faceBase, 'flip-front', large ? 'min-h-72 py-12 sm:min-h-80' : 'min-h-40 py-8')}
+            className={cn(faceBase, 'flip-front', s.face)}
             aria-hidden={flipped}
           >
             <p
               lang="nl"
-              className={cn(
-                'font-display font-bold tracking-tight break-words text-ink',
-                large ? 'text-4xl sm:text-5xl' : 'text-[28px] leading-tight',
-              )}
+              className={cn('font-display font-bold tracking-tight break-words text-ink', s.word)}
             >
               {item.dutch}
             </p>
-            <p lang="zh" className={cn('mt-2 text-muted', large ? 'text-xl' : 'text-[17px]')}>
+            <p lang="zh" className={cn('text-muted', s.translation)}>
               {item.chinese}
             </p>
           </div>
 
           <div
-            className={cn(
-              faceBase,
-              'flip-back bg-sage-50',
-              large ? 'min-h-72 py-12 sm:min-h-80' : 'min-h-40 py-8',
-            )}
+            className={cn(faceBase, 'flip-back bg-sage-50', s.face)}
             aria-hidden={!flipped}
           >
             <p
               lang="nl"
-              className={cn('font-semibold leading-snug text-ink', large ? 'text-2xl sm:text-3xl' : 'text-lg')}
+              className={cn('font-semibold leading-snug text-ink', s.example)}
             >
               {item.exampleDutch}
             </p>
             {item.exampleChinese && (
-              <p lang="zh" className={cn('mt-3 leading-relaxed text-muted', large ? 'text-lg' : 'text-[15px]')}>
+              <p lang="zh" className={cn('leading-relaxed text-muted', s.exampleTranslation)}>
                 {item.exampleChinese}
               </p>
             )}
@@ -85,10 +110,11 @@ export function VocabularyCard({ item, onEdit, onDelete, size = 'default' }: Voc
         </div>
       </div>
 
-      <RotateCw
-        aria-hidden
-        className="pointer-events-none absolute bottom-3 left-4 h-3.5 w-3.5 text-sage-300"
-      />
+      {onOpen ? (
+        <Maximize2 aria-hidden className="pointer-events-none absolute bottom-3 left-4 h-3.5 w-3.5 text-sage-300" />
+      ) : (
+        <RotateCw aria-hidden className="pointer-events-none absolute bottom-3 left-4 h-3.5 w-3.5 text-sage-300" />
+      )}
 
       {(onEdit || onDelete) && (
         <div className="absolute top-1.5 right-1.5 flex">

@@ -16,14 +16,20 @@ test('add a word, flip it, and keep it after a reload', async ({ page }) => {
   await expect(page.getByText('No words for this day yet')).toBeVisible()
 
   await addWord(page, 'gezellig', '温馨的、愉快的', 'Het is gezellig bij ons thuis.')
-  const card = page.getByTestId('vocabulary-card')
-  await expect(card).toContainText('gezellig')
+  await expect(page.getByTestId('vocabulary-card')).toContainText('gezellig')
+
+  // Tapping a word opens it full screen; tapping there flips it.
+  await page.getByTestId('vocabulary-card').click()
+  const viewer = page.getByRole('dialog', { name: 'gezellig' })
+  const card = viewer.getByTestId('vocabulary-card')
   // Only the face pointing at the user is visible (regression: WebKit showed the mirrored back).
-  await expect(page.getByText('Het is gezellig bij ons thuis.')).toBeHidden()
+  await expect(viewer.getByText('Het is gezellig bij ons thuis.')).toBeHidden()
   await card.click()
   await expect(card).toHaveAttribute('data-flipped', 'true')
-  await expect(page.getByText('Het is gezellig bij ons thuis.')).toBeVisible()
-  await expect(page.getByText('gezellig', { exact: true })).toBeHidden()
+  await expect(viewer.getByText('Het is gezellig bij ons thuis.')).toBeVisible()
+  await expect(viewer.getByText('gezellig', { exact: true })).toBeHidden()
+  await viewer.getByRole('button', { name: 'Close' }).click()
+  await expect(viewer).toBeHidden()
 
   await page.reload()
   await expect(page.getByTestId('vocabulary-card')).toContainText('gezellig')

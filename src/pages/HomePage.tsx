@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { BookOpen, Plus } from 'lucide-react'
 import type { Vocabulary, VocabularyInput } from '@/types/vocabulary'
 import { addVocabulary, deleteVocabulary, updateVocabulary } from '@/db/database'
@@ -7,6 +7,7 @@ import { useSelectedDate } from '@/hooks/useSelectedDate'
 import { DateNavigator } from '@/components/DateNavigator'
 import { VocabularyGrid } from '@/components/VocabularyGrid'
 import { VocabularyForm } from '@/components/VocabularyForm'
+import { CardViewer } from '@/components/CardViewer'
 import { Modal } from '@/components/ui/Modal'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Button } from '@/components/ui/Button'
@@ -26,8 +27,10 @@ export function HomePage() {
   const words = useWordsForDate(date)
   const [editor, setEditor] = useState<EditorState>(null)
   const [toDelete, setToDelete] = useState<Vocabulary | null>(null)
+  const [viewerIndex, setViewerIndex] = useState<number | null>(null)
 
   const closeEditor = () => setEditor(null)
+  const closeViewer = useCallback(() => setViewerIndex(null), [])
 
   const handleSave = async (value: VocabularyInput) => {
     if (editor?.mode === 'edit') await updateVocabulary(editor.item.id, value)
@@ -67,7 +70,14 @@ export function HomePage() {
           </div>
         )}
 
-        {words && count > 0 && <VocabularyGrid items={words} onEdit={(item) => setEditor({ mode: 'edit', item })} onDelete={setToDelete} />}
+        {words && count > 0 && (
+          <VocabularyGrid
+            items={words}
+            onEdit={(item) => setEditor({ mode: 'edit', item })}
+            onDelete={setToDelete}
+            onOpen={(item) => setViewerIndex(words.findIndex((w) => w.id === item.id))}
+          />
+        )}
       </section>
 
       {/* Floating add button, sits above the tab bar. */}
@@ -81,6 +91,10 @@ export function HomePage() {
           Add Word
         </Button>
       </div>
+
+      {viewerIndex !== null && words && (
+        <CardViewer items={words} index={viewerIndex} onIndexChange={setViewerIndex} onClose={closeViewer} />
+      )}
 
       <Modal open={editor !== null} title={editor?.mode === 'edit' ? 'Edit word' : 'Add word'} onClose={closeEditor}>
         {editor && (

@@ -67,4 +67,15 @@ describe('VocabularyCard', () => {
     expect(onDelete).toHaveBeenCalledWith(item)
     expect(screen.getByTestId('vocabulary-card')).toHaveAttribute('data-flipped', 'false')
   })
+
+  it('opens instead of flipping when onOpen is given', async () => {
+    const onOpen = vi.fn()
+    render(<VocabularyCard item={item} onOpen={onOpen} />)
+    const card = screen.getByTestId('vocabulary-card')
+    await userEvent.click(card)
+    card.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(onOpen).toHaveBeenCalledTimes(2)
+    expect(card).toHaveAttribute('data-flipped', 'false')
+  })
 })
