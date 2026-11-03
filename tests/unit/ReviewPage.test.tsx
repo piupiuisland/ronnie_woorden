@@ -42,7 +42,15 @@ describe('ReviewPage', () => {
 
     await user.keyboard('{ArrowRight}')
     expect(screen.getByText('drie')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
+
+    // Next after the last card shows the celebration.
+    await user.click(screen.getByRole('button', { name: /next/i }))
+    expect(screen.getByTestId('celebration')).toHaveTextContent('all 3 words')
+    expect(screen.getByText('Gefeliciteerd!')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Start again' }))
+    expect(screen.getByText('een')).toBeInTheDocument()
+    expect(screen.getByTestId('review-progress')).toHaveTextContent('1 / 3')
   })
 
   it('shuffles and can review a single day', async () => {

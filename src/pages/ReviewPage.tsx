@@ -7,6 +7,7 @@ import { seededShuffle } from '@/lib/shuffle'
 import { formatShortDate } from '@/lib/dates'
 import { DateNavigator } from '@/components/DateNavigator'
 import { VocabularyCard } from '@/components/VocabularyCard'
+import { Celebration } from '@/components/Celebration'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
 
@@ -28,10 +29,12 @@ export function ReviewPage() {
   }, [source, shuffleSeed])
 
   const total = deck?.length ?? 0
-  const current = Math.min(index, Math.max(total - 1, 0))
+  // index === total means "finished": the celebration is shown.
+  const current = Math.min(index, total)
+  const done = total > 0 && current === total
   const item = deck?.[current]
 
-  const go = (delta: number) => setIndex((i) => Math.min(Math.max(Math.min(i, total - 1) + delta, 0), Math.max(total - 1, 0)))
+  const go = (delta: number) => setIndex((i) => Math.min(Math.max(Math.min(i, total) + delta, 0), total))
   const goRef = useRef(go)
   useEffect(() => {
     goRef.current = go
@@ -130,6 +133,8 @@ export function ReviewPage() {
           </div>
         )}
 
+        {done && <Celebration count={total} onRestart={() => setIndex(0)} />}
+
         {item && (
           <>
             <div className="mb-3 flex items-center justify-between px-1 text-sm text-muted">
@@ -157,7 +162,7 @@ export function ReviewPage() {
                 <ChevronLeft className="h-5 w-5" aria-hidden />
                 Previous
               </Button>
-              <Button size="lg" className="flex-1" onClick={() => go(1)} disabled={current >= total - 1}>
+              <Button size="lg" className="flex-1" onClick={() => go(1)} disabled={done}>
                 Next
                 <ChevronRight className="h-5 w-5" aria-hidden />
               </Button>

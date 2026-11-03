@@ -118,6 +118,15 @@ describe('HomePage', () => {
     await user.keyboard('{ArrowRight}')
     expect(screen.getByRole('dialog', { name: 'de haan' })).toBeInTheDocument()
 
+    // Next after the last word shows the fireworks.
+    await user.click(screen.getByRole('button', { name: 'Next word' }))
+    const done = screen.getByRole('dialog', { name: 'Well done' })
+    expect(within(done).getByRole('img', { name: 'Fireworks' })).toBeInTheDocument()
+    expect(within(done).getByText('Gefeliciteerd!')).toBeInTheDocument()
+
+    await user.keyboard('{ArrowLeft}')
+    expect(screen.getByRole('dialog', { name: 'de haan' })).toBeInTheDocument()
+
     await user.keyboard('{Escape}')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
