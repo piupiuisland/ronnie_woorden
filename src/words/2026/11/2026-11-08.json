@@ -1,0 +1,62 @@
+[
+  {
+    "dutch": "de kippenpoot",
+    "chinese": "鸡脚",
+    "image": "kippenpoot.svg"
+  },
+  {
+    "dutch": "de bes",
+    "chinese": "浆果(小果子)",
+    "image": "bes.svg"
+  },
+  {
+    "dutch": "de den",
+    "chinese": "松树",
+    "image": "den.svg"
+  },
+  {
+    "dutch": "het bord",
+    "chinese": "盘子",
+    "image": "bord.svg"
+  },
+  {
+    "dutch": "de oom",
+    "chinese": "叔叔、舅舅",
+    "image": "oom.svg"
+  },
+  {
+    "dutch": "de room",
+    "chinese": "奶油",
+    "image": "room.svg"
+  },
+  {
+    "dutch": "de boon",
+    "chinese": "豆子",
+    "image": "boon.svg"
+  },
+  {
+    "dutch": "de eend",
+    "chinese": "鸭子",
+    "image": "eend.svg"
+  },
+  {
+    "dutch": "de erwt",
+    "chinese": "豌豆",
+    "image": "erwt.svg"
+  },
+  {
+    "dutch": "de nek",
+    "chinese": "脖子(后颈)",
+    "image": "nek.svg"
+  },
+  {
+    "dutch": "de vogel",
+    "chinese": "鸟",
+    "image": "vogel.svg"
+  },
+  {
+    "dutch": "het been",
+    "chinese": "腿",
+    "image": "been.svg"
+  }
+]
