@@ -1,0 +1,62 @@
+[
+  {
+    "dutch": "de vaas",
+    "chinese": "花瓶",
+    "image": "vaas.svg"
+  },
+  {
+    "dutch": "de maan",
+    "chinese": "月亮",
+    "image": "maan.svg"
+  },
+  {
+    "dutch": "de vlam",
+    "chinese": "火焰",
+    "image": "vlam.svg"
+  },
+  {
+    "dutch": "de tomaat",
+    "chinese": "番茄、西红柿",
+    "image": "tomaat.svg"
+  },
+  {
+    "dutch": "het nijlpaard",
+    "chinese": "河马",
+    "image": "nijlpaard.svg"
+  },
+  {
+    "dutch": "de neus",
+    "chinese": "鼻子",
+    "image": "neus.svg"
+  },
+  {
+    "dutch": "de bel",
+    "chinese": "铃铛",
+    "image": "bel.svg"
+  },
+  {
+    "dutch": "de pen",
+    "chinese": "笔",
+    "image": "pen.svg"
+  },
+  {
+    "dutch": "het mes",
+    "chinese": "刀",
+    "image": "mes.svg"
+  },
+  {
+    "dutch": "de emmer",
+    "chinese": "桶、水桶",
+    "image": "emmer.svg"
+  },
+  {
+    "dutch": "de weg",
+    "chinese": "公路、路",
+    "image": "weg.svg"
+  },
+  {
+    "dutch": "de slang",
+    "chinese": "蛇",
+    "image": "slang.svg"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "dutch": "de slee",
+    "chinese": "雪橇",
+    "image": "slee.svg"
+  },
+  {
+    "dutch": "de stoel",
+    "chinese": "椅子",
+    "image": "stoel.svg"
+  },
+  {
+    "dutch": "de slak",
+    "chinese": "蜗牛",
+    "image": "slak.svg"
+  },
+  {
+    "dutch": "de baard",
+    "chinese": "胡子(络腮胡)",
+    "image": "baard.svg"
+  },
+  {
+    "dutch": "de jurk",
+    "chinese": "连衣裙",
+    "image": "jurk.svg"
+  },
+  {
+    "dutch": "de kraan",
+    "chinese": "水龙头",
+    "image": "kraan.svg"
+  },
+  {
+    "dutch": "het droogrek",
+    "chinese": "晾衣架",
+    "image": "droogrek.svg"
+  },
+  {
+    "dutch": "het schaap",
+    "chinese": "羊、绵羊",
+    "image": "schaap.svg"
+  },
+  {
+    "dutch": "de kers",
+    "chinese": "樱桃",
+    "image": "kers.svg"
+  },
+  {
+    "dutch": "de gum",
+    "chinese": "橡皮",
+    "image": "gum.svg"
+  },
+  {
+    "dutch": "de hond",
+    "chinese": "狗",
+    "image": "hond.svg"
+  },
+  {
+    "dutch": "het blad",
+    "chinese": "树叶",
+    "image": "blad.svg"
+  }
+]
