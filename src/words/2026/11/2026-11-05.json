@@ -1,0 +1,62 @@
+[
+  {
+    "dutch": "de wip",
+    "chinese": "跷跷板",
+    "image": "wip.svg"
+  },
+  {
+    "dutch": "het hek",
+    "chinese": "栅栏、篱笆",
+    "image": "hek.svg"
+  },
+  {
+    "dutch": "de muur",
+    "chinese": "墙",
+    "image": "muur.svg"
+  },
+  {
+    "dutch": "de vis",
+    "chinese": "鱼",
+    "image": "vis.svg"
+  },
+  {
+    "dutch": "de pan",
+    "chinese": "锅",
+    "image": "pan.svg"
+  },
+  {
+    "dutch": "de krant",
+    "chinese": "报纸",
+    "image": "krant.svg"
+  },
+  {
+    "dutch": "de kaas",
+    "chinese": "奶酪",
+    "image": "kaas.svg"
+  },
+  {
+    "dutch": "de koe",
+    "chinese": "牛、奶牛",
+    "image": "koe.svg"
+  },
+  {
+    "dutch": "het boek",
+    "chinese": "书",
+    "image": "boek.svg"
+  },
+  {
+    "dutch": "de boot",
+    "chinese": "船",
+    "image": "boot.svg"
+  },
+  {
+    "dutch": "de broek",
+    "chinese": "裤子",
+    "image": "broek.svg"
+  },
+  {
+    "dutch": "de kikker",
+    "chinese": "青蛙",
+    "image": "kikker.svg"
+  }
+]

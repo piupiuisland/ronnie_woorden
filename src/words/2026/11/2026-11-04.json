@@ -1,0 +1,62 @@
+[
+  {
+    "dutch": "de walnoot",
+    "chinese": "核桃",
+    "image": "walnoot.svg"
+  },
+  {
+    "dutch": "de boom",
+    "chinese": "树",
+    "image": "boom.svg"
+  },
+  {
+    "dutch": "het dak",
+    "chinese": "房顶、屋顶",
+    "image": "dak.svg"
+  },
+  {
+    "dutch": "de banaan",
+    "chinese": "香蕉",
+    "image": "banaan.svg"
+  },
+  {
+    "dutch": "de doek",
+    "chinese": "布",
+    "image": "doek.svg"
+  },
+  {
+    "dutch": "de tent",
+    "chinese": "帐篷",
+    "image": "tent.svg"
+  },
+  {
+    "dutch": "de druif",
+    "chinese": "葡萄",
+    "image": "druif.svg"
+  },
+  {
+    "dutch": "de hand",
+    "chinese": "手",
+    "image": "hand.svg"
+  },
+  {
+    "dutch": "de mier",
+    "chinese": "蚂蚁",
+    "image": "mier.svg"
+  },
+  {
+    "dutch": "de kerstboom",
+    "chinese": "圣诞树",
+    "image": "kerstboom.svg"
+  },
+  {
+    "dutch": "de doos",
+    "chinese": "箱子、盒子",
+    "image": "doos.svg"
+  },
+  {
+    "dutch": "de appel",
+    "chinese": "苹果",
+    "image": "appel.svg"
+  }
+]
