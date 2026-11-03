@@ -1,0 +1,67 @@
+[
+  {
+    "dutch": "het raam",
+    "chinese": "窗户",
+    "image": "raam.svg"
+  },
+  {
+    "dutch": "dik",
+    "chinese": "胖的、厚的",
+    "image": "dik.svg"
+  },
+  {
+    "dutch": "de deur",
+    "chinese": "门",
+    "image": "deur.svg"
+  },
+  {
+    "dutch": "de rook",
+    "chinese": "烟",
+    "image": "rook.svg"
+  },
+  {
+    "dutch": "de beer",
+    "chinese": "熊",
+    "image": "beer.svg"
+  },
+  {
+    "dutch": "de brug",
+    "chinese": "桥",
+    "image": "brug.svg"
+  },
+  {
+    "dutch": "de bal",
+    "chinese": "球",
+    "image": "bal.svg"
+  },
+  {
+    "dutch": "de kat",
+    "chinese": "猫",
+    "image": "kat.svg"
+  },
+  {
+    "dutch": "de bloem",
+    "chinese": "花",
+    "image": "bloem.svg"
+  },
+  {
+    "dutch": "de bus",
+    "chinese": "公交车、巴士",
+    "image": "bus.svg"
+  },
+  {
+    "dutch": "de poes",
+    "chinese": "猫(口语,多指家猫、小猫)",
+    "image": "poes.svg"
+  },
+  {
+    "dutch": "de strik",
+    "chinese": "蝴蝶结",
+    "image": "strik.svg"
+  },
+  {
+    "dutch": "de rok",
+    "chinese": "裙子(半身裙)",
+    "image": "rok.svg"
+  }
+]

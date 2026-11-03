@@ -60,7 +60,10 @@ src/words/
 
 - The date comes from the file name (`YYYY-MM-DD.json`). The file must sit in the matching
   `YYYY/MM/` folder; `npm run check-words` tells you if one is misplaced.
-- `exampleChinese` is optional; the other fields are required.
+- `exampleChinese` is optional; `dutch` and `chinese` are required.
+- **Pictures:** add `"image": "kat.svg"` to show a drawing on the back of the card. Picture files
+  (`.svg`, `.png`, `.jpg`, `.webp`) go in `src/words/pictures/`. A word needs an example sentence,
+  a picture, or both.
 - `npm run new-day` creates today's file with an empty template (`npm run new-day -- 2026-11-02` for another date).
 - `npm run check-words` validates every file and tells you which word is wrong.
 

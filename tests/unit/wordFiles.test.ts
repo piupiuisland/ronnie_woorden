@@ -28,6 +28,7 @@ describe('word files in src/words', () => {
     const brokenJson = Object.entries(files)
       .filter(([, content]) => typeof content === 'string')
       .map(([path, content]) => `${path}: ${content}`)
-    expect([...brokenJson, ...parseWordFiles(files).errors]).toEqual([])
+    const pictures = new Set(readdirSync(join(root, 'pictures')))
+    expect([...brokenJson, ...parseWordFiles(files, pictures).errors]).toEqual([])
   })
 })

@@ -2,6 +2,7 @@ import { useState, type KeyboardEvent } from 'react'
 import { Maximize2, Pencil, RotateCw, Trash2 } from 'lucide-react'
 import type { Vocabulary } from '@/types/vocabulary'
 import { cn } from '@/lib/cn'
+import { pictureUrl } from '@/lib/pictures'
 
 interface VocabularyCardProps {
   item: Vocabulary
@@ -20,6 +21,7 @@ const sizes = {
     translation: 'mt-2 text-[17px]',
     example: 'text-lg',
     exampleTranslation: 'mt-3 text-[15px]',
+    picture: 'h-24 w-24',
   },
   large: {
     face: 'min-h-72 py-12 sm:min-h-80',
@@ -27,6 +29,7 @@ const sizes = {
     translation: 'mt-2 text-xl',
     example: 'text-2xl sm:text-3xl',
     exampleTranslation: 'mt-3 text-lg',
+    picture: 'h-40 w-40 sm:h-48 sm:w-48',
   },
   full: {
     face: 'min-h-[min(60dvh,36rem)] py-14 px-8',
@@ -34,6 +37,7 @@ const sizes = {
     translation: 'mt-4 text-2xl sm:text-3xl',
     example: 'text-3xl leading-snug sm:text-5xl',
     exampleTranslation: 'mt-5 text-xl sm:text-2xl',
+    picture: 'h-56 w-56 sm:h-80 sm:w-80',
   },
 }
 
@@ -43,6 +47,7 @@ const faceBase =
 export function VocabularyCard({ item, onEdit, onDelete, onOpen, size = 'default' }: VocabularyCardProps) {
   const [flipped, setFlipped] = useState(false)
   const s = sizes[size]
+  const picture = pictureUrl(item.image)
   const toggle = () => (onOpen ? onOpen(item) : setFlipped((f) => !f))
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -95,12 +100,19 @@ export function VocabularyCard({ item, onEdit, onDelete, onOpen, size = 'default
             className={cn(faceBase, 'flip-back bg-sage-50', s.face)}
             aria-hidden={!flipped}
           >
-            <p
-              lang="nl"
-              className={cn('font-semibold leading-snug text-ink', s.example)}
-            >
-              {item.exampleDutch}
-            </p>
+            {picture && (
+              <img
+                src={picture}
+                alt={item.dutch}
+                draggable={false}
+                className={cn('mx-auto object-contain', s.picture, item.exampleDutch && 'mb-4')}
+              />
+            )}
+            {item.exampleDutch && (
+              <p lang="nl" className={cn('font-semibold leading-snug text-ink', s.example)}>
+                {item.exampleDutch}
+              </p>
+            )}
             {item.exampleChinese && (
               <p lang="zh" className={cn('leading-relaxed text-muted', s.exampleTranslation)}>
                 {item.exampleChinese}

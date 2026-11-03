@@ -12,7 +12,10 @@ export function cleanText(value: unknown): string {
   return typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : ''
 }
 
-export function validateVocabularyInput(raw: Partial<Record<keyof VocabularyInput, unknown>>): ValidationResult {
+export function validateVocabularyInput(
+  raw: Partial<Record<keyof VocabularyInput, unknown>>,
+  { exampleRequired = true }: { exampleRequired?: boolean } = {},
+): ValidationResult {
   const value: VocabularyInput = {
     dutch: cleanText(raw.dutch),
     chinese: cleanText(raw.chinese),
@@ -24,7 +27,7 @@ export function validateVocabularyInput(raw: Partial<Record<keyof VocabularyInpu
   const errors: VocabularyErrors = {}
   if (!value.dutch) errors.dutch = 'Please enter the Dutch word.'
   if (!value.chinese) errors.chinese = 'Please enter the Chinese translation.'
-  if (!value.exampleDutch) errors.exampleDutch = 'Please enter a Dutch example sentence.'
+  if (exampleRequired && !value.exampleDutch) errors.exampleDutch = 'Please enter a Dutch example sentence.'
   if (!isValidDateKey(value.date)) errors.date = 'Please choose a valid date.'
 
   return Object.keys(errors).length > 0 ? { ok: false, errors } : { ok: true, value }

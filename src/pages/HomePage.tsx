@@ -104,6 +104,7 @@ export function HomePage() {
             submitLabel={editor.mode === 'edit' ? 'Save changes' : 'Save word'}
             onSubmit={handleSave}
             onCancel={closeEditor}
+            exampleRequired={!(editor.mode === 'edit' && editor.item.image)}
           />
         )}
       </Modal>

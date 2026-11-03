@@ -2,14 +2,17 @@ import type { Vocabulary, VocabularyInput } from '@/types/vocabulary'
 import { db, type WoordenboekDB } from '@/db/database'
 import { isValidDateKey } from './dates'
 import { validateVocabularyInput } from './validation'
+import { pictureNames } from './pictures'
 
 /**
  * Words written as JSON files in src/words/<year>/<month>/<YYYY-MM-DD>.json.
- * Each file is an array of { dutch, chinese, exampleDutch, exampleChinese? }.
- * The date comes from the file name.
+ * Each file is an array of { dutch, chinese, exampleDutch?, exampleChinese?, image? }.
+ * The date comes from the file name. A word needs an example sentence, a picture, or both;
+ * pictures are file names in src/words/pictures.
  */
 export interface BundledWord extends VocabularyInput {
   id: string
+  image?: string
 }
 
 export interface ParsedWordFiles {
@@ -21,8 +24,11 @@ export function bundledWordId(date: string, dutch: string): string {
   return `file:${date}:${dutch.toLowerCase()}`
 }
 
-/** Parses the modules returned by import.meta.glob (path → JSON content). */
-export function parseWordFiles(files: Record<string, unknown>): ParsedWordFiles {
+/**
+ * Parses the modules returned by import.meta.glob (path → JSON content).
+ * `pictures` is the set of available picture file names, used to check `image` references.
+ */
+export function parseWordFiles(files: Record<string, unknown>, pictures: Set<string>): ParsedWordFiles {
   const words: BundledWord[] = []
   const errors: string[] = []
   const seen = new Set<string>()
@@ -50,9 +56,18 @@ export function parseWordFiles(files: Record<string, unknown>): ParsedWordFiles 
         errors.push(`${where}: must be an object`)
         return
       }
-      const result = validateVocabularyInput({ ...(raw as Record<string, unknown>), date })
+      const { image } = raw as { image?: unknown }
+      if (image !== undefined && (typeof image !== 'string' || !pictures.has(image))) {
+        errors.push(`${where}: picture "${String(image)}" not found in src/words/pictures`)
+        return
+      }
+      const result = validateVocabularyInput(
+        { ...(raw as Record<string, unknown>), date },
+        { exampleRequired: image === undefined },
+      )
       if (!result.ok) {
-        errors.push(`${where}: ${Object.values(result.errors).join(' ')}`)
+        const message = Object.values(result.errors).join(' ')
+        errors.push(`${where}: ${message}${result.errors.exampleDutch ? ' (or add a picture)' : ''}`)
         return
       }
       const id = bundledWordId(date, result.value.dutch)
@@ -61,14 +76,14 @@ export function parseWordFiles(files: Record<string, unknown>): ParsedWordFiles 
         return
       }
       seen.add(id)
-      words.push({ ...result.value, id })
+      words.push(image === undefined ? { ...result.value, id } : { ...result.value, id, image })
     })
   }
   return { words, errors }
 }
 
-const contentOf = ({ date, dutch, chinese, exampleDutch, exampleChinese }: BundledWord) =>
-  JSON.stringify([date, dutch, chinese, exampleDutch, exampleChinese])
+const contentOf = ({ date, dutch, chinese, exampleDutch, exampleChinese, image }: BundledWord) =>
+  JSON.stringify([date, dutch, chinese, exampleDutch, exampleChinese, image ?? null])
 
 /**
  * Brings the database in line with the word files:
@@ -96,7 +111,8 @@ export async function syncBundledWords(
       const timestamp = new Date(now.getTime() + i).toISOString() // keeps file order within a day
       const existing = await database.vocabulary.get(id)
       if (existing) {
-        await database.vocabulary.update(id, { ...fields, updatedAt: timestamp })
+        // `image: undefined` removes a picture that was taken out of the file.
+        await database.vocabulary.update(id, { image: undefined, ...fields, updatedAt: timestamp })
         updated++
       } else {
         const item: Vocabulary = { ...fields, id, createdAt: timestamp, updatedAt: timestamp }
@@ -119,7 +135,7 @@ export async function syncBundledWords(
 
 export function loadWordFiles(): ParsedWordFiles {
   const modules = import.meta.glob<unknown>('../words/**/*.json', { eager: true, import: 'default' })
-  return parseWordFiles(modules)
+  return parseWordFiles(modules, pictureNames())
 }
 
 export async function syncWordFiles(): Promise<void> {

@@ -50,7 +50,8 @@ export function parseVocabularyRecord(raw: unknown): Vocabulary | null {
   const dutch = cleanText(r.dutch)
   const chinese = cleanText(r.chinese)
   const exampleDutch = cleanText(r.exampleDutch)
-  if (!dutch || !chinese || !exampleDutch) return null
+  const image = typeof r.image === 'string' && r.image.trim() ? r.image.trim() : undefined
+  if (!dutch || !chinese || (!exampleDutch && !image)) return null
 
   const createdAt = isIsoTimestamp(r.createdAt) ? r.createdAt : new Date().toISOString()
   const updatedAt = isIsoTimestamp(r.updatedAt) ? r.updatedAt : createdAt
@@ -62,6 +63,7 @@ export function parseVocabularyRecord(raw: unknown): Vocabulary | null {
     chinese,
     exampleDutch,
     exampleChinese: cleanText(r.exampleChinese),
+    ...(image && { image }),
     createdAt,
     updatedAt,
   }

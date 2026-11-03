@@ -6,6 +6,8 @@ export interface Vocabulary {
   chinese: string
   exampleDutch: string
   exampleChinese: string
+  /** Optional picture shown on the back: a file name in src/words/pictures (e.g. "kat.svg"). */
+  image?: string
   /** ISO timestamp */
   createdAt: string
   /** ISO timestamp */

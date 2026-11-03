@@ -78,4 +78,10 @@ describe('VocabularyCard', () => {
     expect(onOpen).toHaveBeenCalledTimes(2)
     expect(card).toHaveAttribute('data-flipped', 'false')
   })
+
+  it('shows only the picture on the back when there is no example', async () => {
+    render(<VocabularyCard item={{ ...item, exampleDutch: '', exampleChinese: '', image: 'missing.svg' }} />)
+    await userEvent.click(screen.getByTestId('vocabulary-card'))
+    expect(screen.queryByText('Het is gezellig bij ons thuis.')).not.toBeInTheDocument()
+  })
 })

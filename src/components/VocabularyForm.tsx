@@ -9,9 +9,11 @@ interface VocabularyFormProps {
   submitLabel: string
   onSubmit: (value: VocabularyInput) => Promise<void>
   onCancel: () => void
+  /** False for words that have a picture, which can stand in for the example. */
+  exampleRequired?: boolean
 }
 
-export function VocabularyForm({ initial, submitLabel, onSubmit, onCancel }: VocabularyFormProps) {
+export function VocabularyForm({ initial, submitLabel, onSubmit, onCancel, exampleRequired = true }: VocabularyFormProps) {
   const [values, setValues] = useState<VocabularyInput>(initial)
   const [errors, setErrors] = useState<VocabularyErrors>({})
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -24,7 +26,7 @@ export function VocabularyForm({ initial, submitLabel, onSubmit, onCancel }: Voc
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    const result = validateVocabularyInput(values)
+    const result = validateVocabularyInput(values, { exampleRequired })
     if (!result.ok) {
       setErrors(result.errors)
       return
@@ -66,7 +68,12 @@ export function VocabularyForm({ initial, submitLabel, onSubmit, onCancel }: Voc
           />
         )}
       </Field>
-      <Field label="Dutch example sentence" error={errors.exampleDutch} required>
+      <Field
+        label="Dutch example sentence"
+        hint={exampleRequired ? undefined : 'optional'}
+        error={errors.exampleDutch}
+        required={exampleRequired}
+      >
         {(props) => (
           <textarea
             {...props}

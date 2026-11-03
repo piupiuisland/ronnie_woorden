@@ -64,6 +64,9 @@ describe('backup', () => {
     )
     expect(parsed.records.map((r) => r.id)).toEqual(['a', 'd'])
     expect(parsed.invalid).toBe(4)
+    // A picture can replace the example sentence.
+    const withPicture = parseBackup(backupText([record('p', { exampleDutch: '', image: 'kat.svg' })]))
+    expect(withPicture.records[0].image).toBe('kat.svg')
     // An invalid timestamp is repaired rather than rejected.
     expect(Number.isNaN(Date.parse(parsed.records[1].createdAt))).toBe(false)
   })
