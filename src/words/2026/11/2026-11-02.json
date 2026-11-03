@@ -1,0 +1,38 @@
+[
+  {
+    "dutch": "nat",
+    "chinese": "湿的",
+    "exampleDutch": "De boom is nat.",
+    "exampleChinese": "树是湿的。"
+  },
+  {
+    "dutch": "de boom",
+    "chinese": "树",
+    "exampleDutch": "De boom is nat.",
+    "exampleChinese": "树是湿的。"
+  },
+  {
+    "dutch": "het weer",
+    "chinese": "天气",
+    "exampleDutch": "Het weer is bar en boos.",
+    "exampleChinese": "天气非常恶劣。"
+  },
+  {
+    "dutch": "guur",
+    "chinese": "(天气)阴冷的、寒冷潮湿的",
+    "exampleDutch": "Het weer is bar en boos.",
+    "exampleChinese": "天气非常恶劣。"
+  },
+  {
+    "dutch": "zoekt",
+    "chinese": "找、寻找(zoeken 的第三人称单数)",
+    "exampleDutch": "Sam zoekt in de gang.",
+    "exampleChinese": "Sam 在走廊里找。"
+  },
+  {
+    "dutch": "de das",
+    "chinese": "围巾",
+    "exampleDutch": "Sam zoekt naar een das.",
+    "exampleChinese": "Sam 在找一条围巾。"
+  }
+]
