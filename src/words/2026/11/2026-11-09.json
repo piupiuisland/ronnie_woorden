@@ -1,0 +1,67 @@
+[
+  {
+    "dutch": "de eekhoorn",
+    "chinese": "松鼠",
+    "image": "eekhoorn.svg"
+  },
+  {
+    "dutch": "de teen",
+    "chinese": "脚趾",
+    "image": "teen.svg"
+  },
+  {
+    "dutch": "de dij",
+    "chinese": "大腿",
+    "image": "dij.svg"
+  },
+  {
+    "dutch": "de mees",
+    "chinese": "山雀(一种小鸟)",
+    "image": "mees.svg"
+  },
+  {
+    "dutch": "de beek",
+    "chinese": "小溪",
+    "image": "beek.svg"
+  },
+  {
+    "dutch": "meet",
+    "chinese": "量(ik meet 我量)",
+    "image": "meet.svg"
+  },
+  {
+    "dutch": "de bek",
+    "chinese": "(动物的)嘴、鸟嘴",
+    "image": "bek.svg"
+  },
+  {
+    "dutch": "de traan",
+    "chinese": "眼泪",
+    "image": "traan.svg"
+  },
+  {
+    "dutch": "de tas",
+    "chinese": "包、袋子",
+    "image": "tas.svg"
+  },
+  {
+    "dutch": "het bot",
+    "chinese": "骨头",
+    "image": "bot.svg"
+  },
+  {
+    "dutch": "de tak",
+    "chinese": "树枝",
+    "image": "tak.svg"
+  },
+  {
+    "dutch": "de ton",
+    "chinese": "大桶、圆桶",
+    "image": "ton.svg"
+  },
+  {
+    "dutch": "de pet",
+    "chinese": "帽子(棒球帽)",
+    "image": "pet.svg"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "dutch": "de steen",
+    "chinese": "石头",
+    "image": "steen.svg"
+  },
+  {
+    "dutch": "mis",
+    "chinese": "没打中、没射中",
+    "image": "mis.svg"
+  },
+  {
+    "dutch": "Kaat",
+    "chinese": "卡特(名字,故事里的母鸡)",
+    "image": "kaat.svg"
+  },
+  {
+    "dutch": "de mat",
+    "chinese": "垫子、地垫",
+    "image": "mat.svg"
+  },
+  {
+    "dutch": "de kam",
+    "chinese": "梳子",
+    "image": "kam.svg"
+  },
+  {
+    "dutch": "de bast",
+    "chinese": "树皮",
+    "image": "bast.svg"
+  },
+  {
+    "dutch": "de kast",
+    "chinese": "柜子",
+    "image": "kast.svg"
+  },
+  {
+    "dutch": "boos",
+    "chinese": "生气",
+    "image": "boos.svg"
+  },
+  {
+    "dutch": "giet",
+    "chinese": "浇、倒(水)",
+    "image": "giet.svg"
+  },
+  {
+    "dutch": "het dier",
+    "chinese": "动物",
+    "image": "dier.svg"
+  },
+  {
+    "dutch": "de fiets",
+    "chinese": "自行车",
+    "image": "fiets.svg"
+  },
+  {
+    "dutch": "de kies",
+    "chinese": "大牙、臼齿",
+    "image": "kies.svg"
+  }
+]
