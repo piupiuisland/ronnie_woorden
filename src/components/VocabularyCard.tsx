@@ -32,7 +32,7 @@ const sizes = {
     picture: 'h-40 w-40 sm:h-48 sm:w-48',
   },
   full: {
-    face: 'min-h-[min(60dvh,36rem)] py-14 px-8',
+    face: 'min-h-[min(52dvh,36rem)] py-14 px-8',
     word: 'text-5xl leading-tight sm:text-7xl',
     translation: 'mt-4 text-2xl sm:text-3xl',
     example: 'text-3xl leading-snug sm:text-5xl',

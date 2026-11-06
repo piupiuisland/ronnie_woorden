@@ -3,8 +3,10 @@ import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { Vocabulary } from '@/types/vocabulary'
 import { useSwipe } from '@/hooks/useSwipe'
+import { useMistakes } from '@/hooks/useMistakes'
 import { VocabularyCard } from './VocabularyCard'
 import { Celebration } from './Celebration'
+import { MarkWrongButton } from './MarkWrongButton'
 
 interface CardViewerProps {
   items: Vocabulary[]
@@ -16,12 +18,15 @@ interface CardViewerProps {
 /**
  * Shows one card full screen. Tap to flip, swipe / arrows to move, Escape or ✕ to close.
  * Moving past the last card shows a celebration (index === items.length).
+ * Cards can be marked wrong and reviewed again from the celebration.
  */
 export function CardViewer({ items, index, onIndexChange, onClose }: CardViewerProps) {
-  const total = items.length
+  const mistakes = useMistakes(items)
+  const deck = mistakes.deck ?? items
+  const total = deck.length
   const current = Math.min(index, total)
   const done = current === total
-  const item = items[current]
+  const item = deck[current]
   const closeRef = useRef<HTMLButtonElement>(null)
 
   const go = (delta: number) => {
@@ -70,6 +75,7 @@ export function CardViewer({ items, index, onIndexChange, onClose }: CardViewerP
     >
       <div className="flex items-center justify-between">
         <span className="pl-2 text-sm text-muted" data-testid="viewer-progress">
+          {mistakes.reviewingMistakes && 'Mistakes · '}
           {done ? `${total} / ${total}` : `${current + 1} / ${total}`}
         </span>
         <button
@@ -83,14 +89,31 @@ export function CardViewer({ items, index, onIndexChange, onClose }: CardViewerP
         </button>
       </div>
 
-      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center py-4" {...swipe}>
+      <div className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-center-safe overflow-y-auto py-4" {...swipe}>
         {done ? (
-          <Celebration count={total} onRestart={() => onIndexChange(0)} onClose={onClose} />
+          <Celebration
+            count={total}
+            onRestart={() => {
+              mistakes.reset()
+              onIndexChange(0)
+            }}
+            onClose={onClose}
+            mistakes={mistakes.mistakeCount}
+            onReviewMistakes={() => {
+              mistakes.reviewMistakes()
+              onIndexChange(0)
+            }}
+          />
         ) : (
           <>
             {/* key resets the flip state when moving to another card */}
             <VocabularyCard key={item.id} item={item} size="full" />
             <p className="mt-4 text-center text-xs text-muted">Tap the card to flip · swipe to move</p>
+            <MarkWrongButton
+              marked={mistakes.isMarked(item.id)}
+              onToggle={() => mistakes.toggle(item.id)}
+              className="mx-auto mt-4 w-[calc(50%-0.375rem)]"
+            />
           </>
         )}
       </div>

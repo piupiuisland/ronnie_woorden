@@ -3,11 +3,13 @@ import { ChevronLeft, ChevronRight, Layers, Shuffle } from 'lucide-react'
 import { useAllVocabulary, useWordsForDate } from '@/hooks/useVocabulary'
 import { useSwipe } from '@/hooks/useSwipe'
 import { useSelectedDate } from '@/hooks/useSelectedDate'
+import { useMistakes } from '@/hooks/useMistakes'
 import { seededShuffle } from '@/lib/shuffle'
 import { formatShortDate } from '@/lib/dates'
 import { DateNavigator } from '@/components/DateNavigator'
 import { VocabularyCard } from '@/components/VocabularyCard'
 import { Celebration } from '@/components/Celebration'
+import { MarkWrongButton } from '@/components/MarkWrongButton'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
 
@@ -23,10 +25,12 @@ export function ReviewPage() {
   const day = useWordsForDate(date)
   const source = scope === 'all' ? all : day
 
-  const deck = useMemo(() => {
+  const ordered = useMemo(() => {
     if (!source) return undefined
     return shuffleSeed === null ? source : seededShuffle(source, shuffleSeed)
   }, [source, shuffleSeed])
+  const mistakes = useMistakes(ordered)
+  const deck = mistakes.deck
 
   const total = deck?.length ?? 0
   // index === total means "finished": the celebration is shown.
@@ -52,9 +56,14 @@ export function ReviewPage() {
 
   const swipe = useSwipe(go)
 
+  const restart = () => {
+    mistakes.reset()
+    setIndex(0)
+  }
+
   const changeScope = (next: Scope) => {
     setScope(next)
-    setIndex(0)
+    restart()
   }
 
   return (
@@ -88,7 +97,7 @@ export function ReviewPage() {
           aria-pressed={shuffleSeed !== null}
           onClick={() => {
             setShuffleSeed(Date.now())
-            setIndex(0)
+            restart()
           }}
           className="ml-auto h-11"
         >
@@ -100,7 +109,7 @@ export function ReviewPage() {
             variant="ghost"
             onClick={() => {
               setShuffleSeed(null)
-              setIndex(0)
+              restart()
             }}
           >
             In order
@@ -114,7 +123,7 @@ export function ReviewPage() {
             date={date}
             onChange={(d) => {
               setDate(d)
-              setIndex(0)
+              restart()
             }}
           />
         </div>
@@ -133,12 +142,23 @@ export function ReviewPage() {
           </div>
         )}
 
-        {done && <Celebration count={total} onRestart={() => setIndex(0)} />}
+        {done && (
+          <Celebration
+            count={total}
+            onRestart={restart}
+            mistakes={mistakes.mistakeCount}
+            onReviewMistakes={() => {
+              mistakes.reviewMistakes()
+              setIndex(0)
+            }}
+          />
+        )}
 
         {item && (
           <>
             <div className="mb-3 flex items-center justify-between px-1 text-sm text-muted">
               <span data-testid="review-progress">
+                {mistakes.reviewingMistakes && 'Mistakes · '}
                 {current + 1} / {total}
               </span>
               <span>{formatShortDate(item.date)}</span>
@@ -156,6 +176,12 @@ export function ReviewPage() {
             </div>
 
             <p className="mt-3 text-center text-xs text-muted">Tap the card to flip · swipe or use the buttons to move</p>
+
+            <MarkWrongButton
+              marked={mistakes.isMarked(item.id)}
+              onToggle={() => mistakes.toggle(item.id)}
+              className="mx-auto mt-4 w-[calc(50%-0.375rem)]"
+            />
 
             <div className="mt-5 flex gap-3">
               <Button variant="secondary" size="lg" className="flex-1" onClick={() => go(-1)} disabled={current === 0}>
